@@ -1,5 +1,6 @@
 (ns my-4ever-clojure.core
-  (:gen-class))
+  (:gen-class)
+  (:require [clojure.set :as cset]))
 
 (defn- run-answer
   [answer & fns]
@@ -68,7 +69,7 @@
 (defn construct-sets-2
   [answer]
   (= answer
-     (clojure.set/union #{:a :b :c} #{:b :c :d})))
+     (cset/union #{:a :b :c} #{:b :c :d})))
 ;; (construct-sets-2 construct-sets-answer)
 
 ; #9 conj on sets
@@ -254,7 +255,7 @@
     #(= (% [4 2 1 6]) '(1))
     #(= (% [2 2 4 6]) '())
     #(= (% [1 1 1 3]) '(1 1 1 3)))
-  )
+:rcf)
 
 ; #26 Fibonacci
 
@@ -274,10 +275,19 @@
   (fibonacci 3)
   (fibonacci 6)
   (fibonacci 8)
-  )
+:rcf)
 
 ; #27 Palindrome Detector
-(defn palindrom-detector [x] x)
+(defn palindrom-detector [item]
+  (= (apply str item) (apply str (reverse item))))
+
+(comment
+  (palindrom-detector '(1 2 3 4 5))
+  (palindrom-detector "racecar")
+  (palindrom-detector [:foo :bar :foo])
+  (palindrom-detector '(1 1 3 3 1 1))
+  (palindrom-detector '(:a :b :c))
+:rcf)
 
 
 
