@@ -290,12 +290,19 @@
   :rcf)
 
 ; #28 Flatten a Sequence
-; coll? concat (type instance?)
-;; (defn flatten-a-seq [seq]
-;;   (loop [result []
-;;          curr (first seq)
-;;          other (rest seq)]
-;;     (if )))
+
+(defn flatten-a-seq [seq]
+  (reduce
+   (fn [acc item]
+     (if (coll? item)
+       (into acc (vec (flatten-a-seq item)))
+       (conj acc item)))
+   []
+   seq))
+
+(comment
+  (flatten-a-seq '((1 :a 2) 3 [4 [5 6]]))
+  )
 
 ; ------ (as->) !
 ; ------ (cond->)
@@ -354,6 +361,13 @@
     (apply println n)
     (println "Goodbye")))
 
+(defn increment-map [m f]
+  (reduce-kv
+   (fn [m k v]
+     (assoc m k (f v))) {} m))
+
+
+(def my-ref (ref []))
 
 (comment
   (explore-if-let [1 2 3 4 56 7])
@@ -399,6 +413,7 @@
 ;;   (repeat 10 2)
 ;;   (range 0 20)
 ;;   (take 10 (iterate (partial + 2) 10))
+  (take 10 (repeatedly #(int (rand 11))))
   (partition 4 2 (range 20))
   (partition 4 2 '(:a :b :c :d :e :f :g :h :i :j :k :l :m :n :o))
   (partition 4 2 '(:z) '(:a :b :c :d :e :f :g :h :i :j :k :l :m :n :o))
@@ -439,6 +454,12 @@
 
   (pop '(1 2 3))
   (pop [1 2 3])
+
+  (reductions (fn [acc item]
+                (assoc acc :id (:id item))) {} [{:id "a"}
+                                                {:id "b"}
+                                                {:id "c"}
+                                                {:id "d"}])
 
   :rcf)
 
